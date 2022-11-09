@@ -18,6 +18,7 @@ app.use(express.json());
 
 
 // Connection string
+// Set username & password by dynamically
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.twsrnvr.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -25,7 +26,17 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
+        // Create database & collection
+        const sliderCollection = client.db('foodie').collection('slider');
         const menuCollection = client.db('foodie').collection('menu');
+
+        // get request from database for slider
+        app.get('/slider', async (req, res) => {
+            const query = {}
+            const cursor = sliderCollection.find(query);
+            const slider = await cursor.toArray();
+            res.send(slider);
+        })
     }
     finally {
 
