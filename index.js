@@ -3,7 +3,7 @@ const express = require('express');
 // Add cors
 const cors = require('cors');
 // Add mongodb
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // Require dotenv & call config
 require('dotenv').config();
 
@@ -38,20 +38,28 @@ async function run() {
             res.send(slider)
         });
 
-        // Load data from database for menu by get request
-        app.get('/menu', async (req, res) => {
-            const query = {}
-            const cursor = menuCollection.find(query);
-            const menu = await cursor.toArray();
-            res.send(menu);
-        })
-
         // Load data from database for home by get request
         app.get('/', async (req, res) => {
             const query = {}
             const cursor = menuCollection.find(query);
             const home = await cursor.limit(3).toArray();
             res.send(home);
+        });
+
+        // Load data from database for menu by get request
+        app.get('/menu', async (req, res) => {
+            const query = {}
+            const cursor = menuCollection.find(query);
+            const menus = await cursor.toArray();
+            res.send(menus);
+        });
+
+        // Load data from database for menu with id
+        app.get('/menu/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const menu = await menuCollection.findOne(query);
+            res.send(menu);
         })
     }
     finally {
