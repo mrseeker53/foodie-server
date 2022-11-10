@@ -45,6 +45,14 @@ async function run() {
             const menu = await cursor.toArray();
             res.send(menu);
         })
+
+        // Load data from database for home by get request
+        app.get('/', async (req, res) => {
+            const query = {}
+            const cursor = menuCollection.find(query);
+            const home = await cursor.limit(3).toArray();
+            res.send(home);
+        })
     }
     finally {
 
