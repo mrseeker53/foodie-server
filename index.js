@@ -26,16 +26,24 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        // Create database & collection
+        // Declare database & collection
         const sliderCollection = client.db('foodie').collection('slider');
         const menuCollection = client.db('foodie').collection('menu');
 
-        // get request from database for slider
+        // Load data from database for slider by get request
         app.get('/slider', async (req, res) => {
             const query = {}
             const cursor = sliderCollection.find(query);
             const slider = await cursor.toArray();
             res.send(slider);
+        });
+
+        // Load data from database for menu by get request
+        app.get('/menu', async (req, res) => {
+            const query = {}
+            const cursor = menuCollection.find(query);
+            const menu = await cursor.toArray();
+            res.send(menu);
         })
     }
     finally {
