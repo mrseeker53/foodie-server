@@ -35,7 +35,7 @@ async function run() {
             const query = {}
             const cursor = sliderCollection.find(query);
             const slider = await cursor.toArray();
-            res.send(slider);
+            res.send(slider)
         });
 
         // Load data from database for menu by get request
